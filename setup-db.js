@@ -1,4 +1,6 @@
-const pool = require('./lib/utils/pool');
-const setup = require('./data/setup');
+const database = require('./sql/sequelize')
 
-setup(pool);
+
+// sets up all tables, and drops/clears tables if they already exist.
+
+database.sync({ force: true})
