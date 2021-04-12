@@ -4,6 +4,7 @@ const database = require('../sql/sequelize');
 const Actor = require('../lib/models/actor.js');
 const Studio = require('../lib/models/studio.js');
 const Reviewer = require('../lib/models/reviewer.js');
+const Review = require('../lib/models/review.js');
 const Film = require('../lib/models/film');
 
 //Actors===
@@ -275,4 +276,92 @@ describe('All Film routes for Films Table', () => {
         })
       })
   })
-})
+});
+
+//REVIEWS===
+describe('All REVIEWS routes for REVIEWS Table', () => {
+  beforeEach(() => {
+    return database.sync({ force: true})
+  });
+  it('should add a review to the the reviews table', async () => {
+    await Reviewer.create({
+      name: 'Daniel Craig',
+      company: 'Kulp',
+    })
+    await Film.create({
+      title: 'Tomorrow always sleeps',
+      released: 1945
+    })
+    return request(app)
+      .post('/api/reviews')
+      .send({
+        rating: 4,
+        review: 'This movie was amazing!  Would watch again!',
+        reviewer: 'Daniel Craig',
+        title: 'Tomorrow always sleeps'
+      })
+      .then((res) => {
+        expect(res.body).toEqual({
+          id: 1,
+          rating: 4,
+          review: 'This movie was amazing!  Would watch again!'
+      })
+    })
+  })
+  it('should GET all reviews from the reviews table', async () => {
+    await Reviewer.create({
+      name: 'Daniel Craig',
+      company: 'Kulp',
+    })
+    await Film.create({
+      title: 'Tomorrow always sleeps',
+      released: 1945
+    })
+    await Review.bulkCreate([{
+      rating: 4,
+      review: 'This movie was amazing!  Would watch again!',
+      reviewer: 'Daniel Craig',
+      film: 'Tomorrow always sleeps'
+    },
+    {
+      rating: 1,
+      review: 'What a terrible performance!  HORRIBLE!',
+      reviewer: 'Daniel Craig',
+      film: 'Tomorrow always sleeps'
+    }])
+    return request(app)
+      .get('/api/reviews')
+      .then((res) => {
+        expect(res.body).toEqual(expect.any(Array))
+        expect(res.body.length).toEqual(2)
+    })
+  })
+
+  it('it should delete a review from the review table', async () => {
+    await Reviewer.create({
+      name: 'Daniel Craig',
+      company: 'Kulp',
+    })
+    await Film.create({
+      title: 'Tomorrow always sleeps',
+      released: 1945
+    })
+    await Review.bulkCreate([{
+      rating: 4,
+      review: 'This movie was amazing!  Would watch again!',
+      reviewer: 'Daniel Craig',
+      title: 'Tomorrow always sleeps'
+    },
+    {
+      rating: 1,
+      review: 'What a terrible performance!  HORRIBLE!',
+      reviewer: 'Daniel Craig',
+      title: 'Tomorrow always sleeps'
+    }])
+    return request(app)
+      .delete('/api/reviewers/1')
+      .then((res) => {
+        expect(res.body).toEqual({ success: '👍' });
+      });
+  });
+});
