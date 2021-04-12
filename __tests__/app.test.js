@@ -5,7 +5,7 @@ const Actor = require('../lib/models/actor.js');
 const Studio = require('../lib/models/studio.js');
 const Reviewer = require('../lib/models/reviewer.js');
 
-
+//Actors===
 describe('All Actor routes for Actor Table', () => {
   beforeEach(() => {
     return database.sync({ force: true})
@@ -143,7 +143,7 @@ describe('All Reviewers routes for Reviewers Table', () => {
     return database.sync({ force: true})
   });
   
-  it('should add an reviewer to the the reviwers table', () => {
+  it('should add an reviewer to the the reviewers table', () => {
     return request(app)
       .post('/api/reviewers')
       .send({
@@ -231,3 +231,23 @@ describe('All Reviewers routes for Reviewers Table', () => {
   });
 
 });
+
+
+//Films===
+describe('All Film routes for Films Table', () => {
+  it('should add a movie in the Films Table', async() => {
+    return request(app)
+      .post('/api/films')
+      .send({
+        title: 'Gone with a Breeze',
+        released: 1978
+      })
+      .then((res) => {
+        expect(res.body).toEqual({
+          id: 1,
+          title: 'Gone with a Breeze',
+          released: 1978
+        })
+      })
+  })
+})
