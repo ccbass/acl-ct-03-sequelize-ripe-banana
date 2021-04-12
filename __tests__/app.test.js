@@ -263,4 +263,16 @@ describe('All Film routes for Films Table', () => {
       }])
     })
   })
+
+  it('should get a film by its ID form the Films Table', async() => {
+    return request(app)
+      .get('/api/films/1')
+      .then((res) => {
+        expect(res.body).toEqual({
+          id: 1,
+          title: 'Gone with a Breeze',
+          released: 1978
+        })
+      })
+  })
 })
