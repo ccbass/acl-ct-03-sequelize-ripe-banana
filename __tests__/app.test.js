@@ -4,6 +4,7 @@ const database = require('../sql/sequelize');
 const Actor = require('../lib/models/actor.js');
 const Studio = require('../lib/models/studio.js');
 const Reviewer = require('../lib/models/reviewer.js');
+const Film = require('../lib/models/film');
 
 //Actors===
 describe('All Actor routes for Actor Table', () => {
@@ -248,5 +249,18 @@ describe('All Film routes for Films Table', () => {
           released: 1978
         })
       })
+  })
+
+  it('should get all films from the Films Table', async() => {
+    return request(app)
+      .get('/api/films')
+      .then((res) => {
+        expect(res.body).toEqual([
+        {
+          id: 1,
+          title: 'Gone with a Breeze',
+          released: 1978
+      }])
+    })
   })
 })
