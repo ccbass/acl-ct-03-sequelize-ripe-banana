@@ -232,7 +232,6 @@ describe('All Reviewers routes for Reviewers Table', () => {
 
 });
 
-
 //Films===
 describe('All Film routes for Films Table', () => {
   it('should add a movie in the Films Table', async() => {
@@ -240,7 +239,7 @@ describe('All Film routes for Films Table', () => {
       .post('/api/films')
       .send({
         title: 'Gone with a Breeze',
-        released: 1978
+        released: '1978'
       })
       .then((res) => {
         expect(res.body).toEqual({
