@@ -76,7 +76,7 @@ describe('All Studio routes for Studio Table', () => {
     return database.sync({ force: true})
   });
   
-  it('should add an actor to the the Actor table', () => {
+  it('should add a Studio to the the Studio table', () => {
     return request(app)
       .post('/api/studios')
       .send({
@@ -96,7 +96,7 @@ describe('All Studio routes for Studio Table', () => {
     })
   })
 
-  it('should GET all actors from the Actor table', async () => {
+  it('should GET all Studios from the Studio table', async () => {
     await Studio.bulkCreate([{
       name: 'Paramount',
       city: 'Los Angeles',
@@ -117,7 +117,7 @@ describe('All Studio routes for Studio Table', () => {
     })
   })
 
-  it('should GET a single actor from the Actors table', async() => {
+  it('should GET a single Studio from the Studio table', async() => {
     await Studio.create({
       name: 'Warner Brothers',
       city: 'Los Angeles',
@@ -300,7 +300,7 @@ describe('All Film routes for Films Table', () => {
       state: 'OR',
       country: 'USA',
     })
-    
+
     await Film.create({
       StudioId: 1,
       title: 'Gone with a Breeze',
