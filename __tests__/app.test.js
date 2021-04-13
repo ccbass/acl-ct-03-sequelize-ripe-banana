@@ -236,15 +236,28 @@ describe('All Reviewers routes for Reviewers Table', () => {
 
 //Films===
 describe('All Film routes for Films Table', () => {
+  beforeEach(() => {
+    return database.sync({ force: true})
+  });
+  
   it('should add a movie in the Films Table', async() => {
+    await Studio.create({
+      name: 'Alchemy Studios',
+      city: 'Portland',
+      state: 'OR',
+      country: 'USA',
+    })
+
     return request(app)
       .post('/api/films')
       .send({
+        StudioId: 1,
         title: 'Gone with a Breeze',
         released: '1978'
       })
       .then((res) => {
         expect(res.body).toEqual({
+          StudioId: expect.any(Number),
           id: 1,
           title: 'Gone with a Breeze',
           released: 1978
@@ -253,11 +266,26 @@ describe('All Film routes for Films Table', () => {
   })
 
   it('should get all films from the Films Table', async() => {
+    await Studio.create({
+      name: 'Alchemy Studios',
+      city: 'Portland',
+      state: 'OR',
+      country: 'USA',
+    })
+
+    await Film.create({
+      StudioId: 1,
+      title: 'Gone with a Breeze',
+      released: '1978'
+    })
+
+
     return request(app)
       .get('/api/films')
       .then((res) => {
         expect(res.body).toEqual([
         {
+          StudioId: expect.any(Number),
           id: 1,
           title: 'Gone with a Breeze',
           released: 1978
@@ -266,10 +294,24 @@ describe('All Film routes for Films Table', () => {
   })
 
   it('should get a film by its ID form the Films Table', async() => {
+    await Studio.create({
+      name: 'Alchemy Studios',
+      city: 'Portland',
+      state: 'OR',
+      country: 'USA',
+    })
+    
+    await Film.create({
+      StudioId: 1,
+      title: 'Gone with a Breeze',
+      released: '1978'
+    })
+
     return request(app)
       .get('/api/films/1')
       .then((res) => {
         expect(res.body).toEqual({
+          StudioId: expect.any(Number),
           id: 1,
           title: 'Gone with a Breeze',
           released: 1978
@@ -301,7 +343,10 @@ describe('All REVIEWS routes for REVIEWS Table', () => {
         title: 'Tomorrow always sleeps'
       })
       .then((res) => {
+        console.log(res.body)
         expect(res.body).toEqual({
+          FilmId: expect.any(Number),
+          ReviewerId: expect.any(Number),
           id: 1,
           rating: 4,
           review: 'This movie was amazing!  Would watch again!'
